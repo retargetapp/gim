@@ -1,3 +1,3 @@
 # migrate
 
-Test hook
+Test hooks
