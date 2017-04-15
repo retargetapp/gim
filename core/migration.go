@@ -1,4 +1,4 @@
-package main
+package core
 
 type Migration struct {
 	Version uint64		`db:"version"`

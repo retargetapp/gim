@@ -1,4 +1,4 @@
-package main
+package core
 
 import (
 	"database/sql"
@@ -8,14 +8,12 @@ import (
 
 type DBConnectError error
 
-var DB *sql.DB
-
-func initDB(driver, dsn string) error {
+func InitDB(driver, dsn string) (*sql.DB, error) {
 	db, _ := sql.Open(driver, dsn )
 	err := db.Ping()
 	if err != nil {
-		return DBConnectError(err)
+		return db, DBConnectError(err)
 	}
 	defer db.Close()
-	return nil
+	return db, nil
 }
