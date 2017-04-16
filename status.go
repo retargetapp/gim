@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/urfave/cli"
 	"log"
+
+	"github.com/urfave/cli"
 )
 
 func statusCmd(c *cli.Context) error {

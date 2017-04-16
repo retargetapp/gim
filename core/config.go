@@ -1,19 +1,20 @@
 package core
 
 import (
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+
 	"github.com/pkg/errors"
+	"gopkg.in/yaml.v2"
 )
 
 const (
 	CONFIG_FILE_NAME = ".gim.yml"
 
-	ERROR_LOAD_CONFIG_FILE = "load_config_file_error"
+	ERROR_LOAD_CONFIG_FILE           = "load_config_file_error"
 	ERROR_INVALID_CONFIG_FILE_FORMAT = "invalid_config_file_format"
-	ERROR_SAVE_CONFIG_FILE = "save_confgi_file_error"
+	ERROR_SAVE_CONFIG_FILE           = "save_confgi_file_error"
 )
 
 type Config struct {

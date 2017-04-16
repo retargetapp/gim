@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
 	"github.com/urfave/cli"
 )
 
@@ -56,6 +57,6 @@ func installGitHook(filepath string) error {
 		return nil
 	}
 
-	 _, err = f.WriteString(CALL_GIN_GIT_HOOK_CODE + "\n")
+	_, err = f.WriteString(CALL_GIN_GIT_HOOK_CODE + "\n")
 	return err
 }

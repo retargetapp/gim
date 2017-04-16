@@ -67,7 +67,6 @@ func configCmd(c *cli.Context) error {
 		}
 	}
 
-
 	for err = errors.New(""); err != nil; {
 		var path string
 		var f *os.File
