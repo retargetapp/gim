@@ -12,54 +12,55 @@ func main() {
 	app.Usage = ""
 	app.Commands = []cli.Command{
 		{
-			Name: "init",
-			Usage: "Config .gim.yml file and install Git hooks",
+			Name:   "init",
+			Usage:  "Config .gim.yml file and install Git hooks",
 			Action: initCmd,
 		},
 		{
-			Name: "config",
-			Usage: "Config DSN and sql migrations resource directory.",
+			Name:   "config",
+			Usage:  "Config DSN and sql migrations resource directory.",
 			Action: configCmd,
 		},
 		{
-			Name: "install",
-			Usage: "Install Git post-merge and post-checkout hooks for current dir repo.",
+			Name:   "install",
+			Usage:  "Install Git post-merge and post-checkout hooks for current dir repo.",
 			Action: installCmd,
 		},
 		{
-			Name: "status",
-			Usage: "Show DB migraions status",
+			Name:   "status",
+			Usage:  "Show DB migraions status",
 			Action: statusCmd,
 		},
 		{
-			Name: "sync",
-			Usage:	"Sync DB according to migartion resources (sql files)",
+			Name:   "sync",
+			Usage:  "Sync DB according to migartion resources (sql files)",
 			Action: syncCmd,
 		},
 		{
-			Name: "apply",
-			Usage: "apply <version> – Apply custom migration version",
+			Name:   "apply",
+			Usage:  "apply <version> – Apply custom migration version",
 			Action: applyCmd,
 		},
 		{
-			Name: "revert",
-			Usage: "apply <version> – Revert custom migration version",
+			Name:   "revert",
+			Usage:  "apply <version> – Revert custom migration version",
 			Action: revertCmd,
 		},
 		{
-			Name: "up",
-			Usage: "up <version> – Apply all migration versions until defined specified",
+			Name:   "up",
+			Usage:  "up <version> – Apply all migration versions until defined specified",
 			Action: upCmd,
 		},
 		{
-			Name: "down",
-			Usage: "down <version> – Revert all migration versions until defined specified",
+			Name:   "down",
+			Usage:  "down <version> – Revert all migration versions until defined specified",
 			Action: downCmd,
 		},
 	}
 
 	app.Run(os.Args)
 }
+
 /*
 func init() {
 	cfg, err := loadConfig()

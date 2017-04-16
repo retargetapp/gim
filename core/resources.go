@@ -1,13 +1,13 @@
 package core
 
 import (
-	"log"
-	"regexp"
-	"path/filepath"
-	"io/ioutil"
-	"os"
 	"bytes"
 	"errors"
+	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
+	"regexp"
 	"strconv"
 )
 
