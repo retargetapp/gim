@@ -9,7 +9,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-const CALL_GIN_GIT_HOOK_CODE = "$GOPATH/bin/gin sync"
+const CALL_GIM_GIT_HOOK_CODE = "$GOPATH/bin/gim sync"
 
 func installCmd(c *cli.Context) error {
 	fmt.Println("Install Git hooks...")
@@ -47,7 +47,7 @@ func installGitHook(filepath string) error {
 
 	i, sc := false, bufio.NewScanner(f)
 	for sc.Scan() {
-		if sc.Text() == CALL_GIN_GIT_HOOK_CODE {
+		if sc.Text() == CALL_GIM_GIT_HOOK_CODE {
 			i = true
 			break
 		}
@@ -57,6 +57,6 @@ func installGitHook(filepath string) error {
 		return nil
 	}
 
-	_, err = f.WriteString(CALL_GIN_GIT_HOOK_CODE + "\n")
+	_, err = f.WriteString(CALL_GIM_GIT_HOOK_CODE + "\n")
 	return err
 }

@@ -12,7 +12,7 @@ import (
 )
 
 func configCmd(c *cli.Context) error {
-	fmt.Println("Config Gin in current directory")
+	fmt.Println("Config Gim in current directory")
 	cfg, err := core.LoadConfig()
 
 	if err == nil {
