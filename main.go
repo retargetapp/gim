@@ -62,6 +62,11 @@ func main() {
 			Usage:  "down <version> – Revert all migration versions until defined specified",
 			Action: downCmd,
 		},
+		{
+			Name:   "create",
+			Usage:  "create – Create migartion source templates",
+			Action: createCmd,
+		},
 	}
 
 	app.Run(os.Args)

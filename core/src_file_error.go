@@ -21,7 +21,7 @@ func (e ResFileError) Message() string {
 	} else if e.code == ERROR_EMPTY_SRC_FILE {
 		return "Source file " + e.version + "." + e.tp + ".sql is empty"
 	} else if e.code == ERROR_INVALID_VERSION_FORMAT {
-		return "Invalid version form for version. Error: " + e.parent.Error()
+		return "Invalid version format for version. Error: " + e.parent.Error()
 	}
 	return ""
 }

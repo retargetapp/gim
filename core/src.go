@@ -30,7 +30,7 @@ func LoadSrcMigrations(path string) (map[uint64]*Migration, error) {
 	}
 
 	for _, v := range vs {
-		m, err := loadSrcMigration(p, v)
+		m, err := LoadSrcMigration(p, v)
 		if err != nil {
 			return ml, err
 		}
@@ -67,7 +67,7 @@ func loadSrcVersions(path string) ([]string, error) {
 	return vs, nil
 }
 
-func loadSrcMigration(path string, version string) (*Migration, error) {
+func LoadSrcMigration(path string, version string) (*Migration, error) {
 	m := &Migration{}
 	vInt, err := strconv.ParseInt(version, 10, 64)
 	if err != nil {

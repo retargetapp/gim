@@ -18,6 +18,7 @@ const (
 
 	ERROR_MIGRATION_TABLE_NOT_EXISTS     = "migration_table_not_exists"
 	ERROR_MIGRATION_TABLE_INVALID_SCHEMA = "migration_table_invalid_schema"
+	ERROR_MIGRATION_RECORD_NOT_EXISTS    = "migration_record_not_exists"
 )
 
 type MigrationsTableNotExistsError error
@@ -72,4 +73,34 @@ func LoadDBMigrations(db *sql.DB) (map[uint64]*Migration, error) {
 		}
 	}
 	return m, err
+}
+
+func LoadDBMigration(db *sql.DB, version string) (*Migration, error) {
+	var m = Migration{}
+	q := "SELECT * FROM `" + MIGRATIONS_TABLE_NAME + "` WHERE `version` = " + version + ""
+	err := db.QueryRow(q).Scan(&m.Version, &m.Up, &m.Down)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return &m, errors.New(ERROR_MIGRATION_RECORD_NOT_EXISTS)
+		}
+	}
+	return &m, err
+}
+
+func ApplyMigration(db *sql.DB, m *Migration) error {
+	st, err := db.Prepare("INSERT INTO `" + MIGRATIONS_TABLE_NAME + "`(`version`, `up`, `down`) VALUES(?,?,?);")
+	if err != nil {
+		return err
+	}
+	_, err = st.Exec(m.Version, m.Up, m.Down)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.Exec(m.Up)
+	if err != nil {
+		db.Exec("DELETE FROM `"+MIGRATIONS_TABLE_NAME+"` WHERE `version` = ?", m.Version)
+		return err
+	}
+	return nil
 }
