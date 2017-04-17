@@ -3,7 +3,12 @@ package main
 import (
 	"os"
 
+	"fmt"
+
+	"database/sql"
+
 	"github.com/urfave/cli"
+	"github.com/vova-ukraine/gim/core"
 )
 
 func main() {
@@ -28,9 +33,9 @@ func main() {
 			Action: installCmd,
 		},
 		{
-			Name:   "status",
-			Usage:  "Show DB migraions status",
-			Action: statusCmd,
+			Name:   "state",
+			Usage:  "Show Gim migraions state",
+			Action: stateCmd,
 		},
 		{
 			Name:   "sync",
@@ -60,6 +65,29 @@ func main() {
 	}
 
 	app.Run(os.Args)
+}
+
+func loadConfigHelper() *core.Config {
+	cfg, err := core.LoadConfig()
+	if err != nil {
+		switch err.Error() {
+		case core.ERROR_INVALID_CONFIG_FILE_FORMAT:
+			fmt.Println("Gim config file `.gim.yml` has invalid format. Run `gim config` to resetup config")
+		case core.ERROR_LOAD_CONFIG_FILE:
+			fmt.Println("Gim config file `.gim.yml` doesn't exists or is unreadable")
+		}
+		os.Exit(1)
+	}
+	return cfg
+}
+
+func initDBHelper(cfg *core.Config) *sql.DB {
+	db, err := core.InitDB(cfg.Driver, cfg.DSN)
+	if err != nil {
+		fmt.Println("Unable to connect to DB: " + err.Error())
+		os.Exit(1)
+	}
+	return db
 }
 
 /*

@@ -7,15 +7,12 @@ import (
 	"github.com/pkg/errors"
 )
 
-type DBConnectError error
-
 const (
 	MIGRATIONS_TABLE_NAME  = "gim_migrations"
 	MIGRATION_TABLE_SCRIPT = "CREATE TABLE `gim_migrations` (\n" +
 		"  `version` int(8) unsigned NOT NULL AUTO_INCREMENT,\n" +
 		"  `up` text NOT NULL,\n" +
 		"  `down` text NOT NULL,\n" +
-		"  `done` tinyint(1) NOT NULL DEFAULT '0',\n" +
 		"  PRIMARY KEY (`version`)\n" +
 		") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4"
 
@@ -30,7 +27,7 @@ func InitDB(driver, dsn string) (*sql.DB, error) {
 	db, _ := sql.Open(driver, dsn)
 	err := db.Ping()
 	if err != nil {
-		return db, DBConnectError(err)
+		return db, err
 	}
 	return db, nil
 }
@@ -51,4 +48,28 @@ func CheckMigrationsTable(db *sql.DB) error {
 func CreateMigrationTable(db *sql.DB) error {
 	_, err := db.Exec(MIGRATION_TABLE_SCRIPT)
 	return err
+}
+
+func LoadDBMigrations(db *sql.DB) (map[uint64]*Migration, error) {
+	var m = map[uint64]*Migration{}
+	r, err := db.Query("SELECT * FROM " + MIGRATIONS_TABLE_NAME)
+	if err != nil {
+		return m, err
+	}
+	defer r.Close()
+
+	for r.Next() {
+		var u, d string
+		var v uint64
+		err := r.Scan(&v, &u, &d)
+		if err != nil {
+			return m, err
+		}
+		m[v] = &Migration{
+			Version: v,
+			Up:      u,
+			Down:    d,
+		}
+	}
+	return m, err
 }
