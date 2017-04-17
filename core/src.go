@@ -40,33 +40,6 @@ func LoadSrcMigrations(path string) (map[uint64]*Migration, error) {
 	return ml, nil
 }
 
-func loadSrcVersions(path string) ([]string, error) {
-	var vs []string
-	fl, err := ioutil.ReadDir(path)
-	if err != nil {
-		return vs, errors.New(ERROR_INVALID_SRC_DIRECTORY)
-	}
-
-	var exp, _ = regexp.Compile("^(\\d{10})\\.(up|down)\\.sql$")
-	var vm = make(map[string]struct{})
-	for _, f := range fl {
-		if f.IsDir() {
-			continue
-		}
-		if !exp.MatchString(f.Name()) {
-			continue
-		}
-		v := exp.FindStringSubmatch(f.Name())[1]
-		vm[v] = struct{}{}
-	}
-
-	for v, _ := range vm {
-		vs = append(vs, v)
-	}
-
-	return vs, nil
-}
-
 func LoadSrcMigration(path string, version string) (*Migration, error) {
 	m := &Migration{}
 	vInt, err := strconv.ParseInt(version, 10, 64)
@@ -92,4 +65,46 @@ func LoadSrcMigration(path string, version string) (*Migration, error) {
 	}
 	m.Down = string(buf)
 	return m, nil
+}
+
+func CreateSrcVersionTpl(path string, v string) error {
+	f, err := os.OpenFile(path+string(os.PathSeparator)+v+".up.sql", os.O_CREATE, 0666)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	f, err = os.OpenFile(path+string(os.PathSeparator)+v+".down.sql", os.O_CREATE, 0666)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return nil
+}
+
+func loadSrcVersions(path string) ([]string, error) {
+	var vs []string
+	fl, err := ioutil.ReadDir(path)
+	if err != nil {
+		return vs, errors.New(ERROR_INVALID_SRC_DIRECTORY)
+	}
+
+	var exp, _ = regexp.Compile("^(\\d{10})\\.(up|down)\\.sql$")
+	var vm = make(map[string]struct{})
+	for _, f := range fl {
+		if f.IsDir() {
+			continue
+		}
+		if !exp.MatchString(f.Name()) {
+			continue
+		}
+		v := exp.FindStringSubmatch(f.Name())[1]
+		vm[v] = struct{}{}
+	}
+
+	for v, _ := range vm {
+		vs = append(vs, v)
+	}
+
+	return vs, nil
 }
