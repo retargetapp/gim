@@ -16,6 +16,7 @@ func main() {
 
 	app.Name = "Migrate"
 	app.Usage = ""
+	app.Version = "0.0.9"
 	app.Commands = []cli.Command{
 		{
 			Name:   "init",

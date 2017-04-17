@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/urfave/cli"
 	"github.com/vova-ukraine/gim/core"
@@ -11,8 +10,7 @@ import (
 func revertCmd(c *cli.Context) error {
 	fmt.Println("Revert custom migration version")
 	if !c.Args().Present() {
-		fmt.Println("Migration version undefined. Use `gim revert <version>`")
-		os.Exit(1)
+		return cli.NewExitError("Migration version undefined. Use `gim revert <version>`", 1)
 	}
 
 	v := c.Args().Get(0)
@@ -22,11 +20,10 @@ func revertCmd(c *cli.Context) error {
 	m, err := core.LoadDBMigration(db, v)
 	if err != nil {
 		if err.Error() == core.ERROR_MIGRATION_RECORD_NOT_EXISTS {
-			fmt.Println("Unable to revert migration version `" + v + "`. No such applied version")
+			return cli.NewExitError("Unable to revert migration version `"+v+"`. No such applied version", 1)
 		} else {
-			fmt.Println("Unable to revert migration version `" + v + ". Error: " + err.Error())
+			return cli.NewExitError("Unable to revert migration version `"+v+". Error: "+err.Error(), 1)
 		}
-		os.Exit(1)
 	}
 
 	fmt.Print("Reverting migration with version `" + v + "`...")

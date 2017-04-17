@@ -52,17 +52,13 @@ func configCmd(c *cli.Context) error {
 	} else {
 		switch err.Error() {
 		case core.ERROR_MIGRATION_TABLE_INVALID_SCHEMA:
-			fmt.Println("Unable to config database, table `gim_migrations` exists but it's not Gim migrations table")
-			// TODO: refactor to property exit way
-			os.Exit(1)
+			return cli.NewExitError("Unable to config database, table `gim_migrations` exists but it's not Gim migrations table", 1)
 		case core.ERROR_MIGRATION_TABLE_NOT_EXISTS:
 			err = core.CreateMigrationTable(db)
 			if err == nil {
 				fmt.Println("Table `gim_migrations` created")
 			} else {
-				fmt.Println("Unable to create `gim_migrations` table:" + err.Error())
-				// TODO: refactor to property exit way
-				os.Exit(1)
+				return cli.NewExitError("Unable to create `gim_migrations` table:"+err.Error(), 1)
 			}
 		}
 	}
@@ -90,9 +86,7 @@ func configCmd(c *cli.Context) error {
 	err = core.SaveConfig(cfg)
 
 	if err != nil {
-		fmt.Println("Unable to save config file: ", core.CONFIG_FILE_NAME, err.Error())
-		// TODO: refactor to property exit way
-		os.Exit(1)
+		return cli.NewExitError("Unable to save config file: "+core.CONFIG_FILE_NAME+". "+err.Error(), 1)
 	}
 	fmt.Printf("Config %s updated\n", core.CONFIG_FILE_NAME)
 	return nil

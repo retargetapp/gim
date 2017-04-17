@@ -21,17 +21,13 @@ func installCmd(c *cli.Context) error {
 
 	err = installGitHook(hp + string(os.PathSeparator) + "post-merge")
 	if err != nil {
-		fmt.Println("Unable to insatll Git post-merge hook: " + err.Error())
-		// TODO: REFACTOR EXIT
-		os.Exit(1)
+		return cli.NewExitError("Unable to insatll Git post-merge hook: "+err.Error(), 1)
 	}
 	fmt.Println("Post-merge Git hook installed")
 
 	installGitHook(hp + string(os.PathSeparator) + "post-checkout")
 	if err != nil {
-		fmt.Println("Unable to insatll Git post-checkout hook: " + err.Error())
-		// TODO: REFACTOR EXIT
-		os.Exit(1)
+		return cli.NewExitError("Unable to insatll Git post-checkout hook: "+err.Error(), 1)
 	}
 	fmt.Println("Post-checkout Git hook installed")
 

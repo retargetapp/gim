@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 
-	"os"
-
 	"sort"
 
 	"strconv"
@@ -27,13 +25,12 @@ func syncCmd(c *cli.Context) error {
 	mr, err := core.LoadSrcMigrations(cfg.Src)
 	if err != nil {
 		if rfe, ok := err.(core.ResFileError); ok {
-			fmt.Println(rfe.Message())
+			return cli.NewExitError(rfe.Message(), 1)
 		} else if err.Error() == core.ERROR_INVALID_SRC_DIRECTORY {
-			fmt.Println("Unable to read sources files from source directory")
+			return cli.NewExitError("Unable to read sources files from source directory", 1)
 		} else {
-			fmt.Println(err.Error())
+			return cli.NewExitError(err.Error(), 1)
 		}
-		os.Exit(1)
 	}
 
 	var vs = []int64{}
@@ -50,8 +47,7 @@ func syncCmd(c *cli.Context) error {
 		err = core.RevertMigration(db, md[v])
 		if err != nil {
 			fmt.Println("failed.")
-			fmt.Println("Unable to revert migration. Error:" + err.Error())
-			os.Exit(1)
+			return cli.NewExitError("Unable to revert migration. Error:"+err.Error(), 1)
 		}
 		fmt.Println("ok.")
 	}
@@ -70,8 +66,7 @@ func syncCmd(c *cli.Context) error {
 		err = core.ApplyMigration(db, mr[v])
 		if err != nil {
 			fmt.Println("failed.")
-			fmt.Println("Unable to apply migration. Error:" + err.Error())
-			os.Exit(1)
+			return cli.NewExitError("Unable to apply migration. Error:"+err.Error(), 1)
 		}
 		fmt.Println("ok.")
 	}
