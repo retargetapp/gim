@@ -14,6 +14,8 @@ import (
 
 // TODO: Implement `gim down *` ability to down throw all migrations
 func downCmd(c *cli.Context) error {
+	var vi int64
+	var err error
 	fmt.Println("Down to custom migration version")
 	if !c.Args().Present() {
 		fmt.Println("Migration version undefined. Use `gim down <version>`")
@@ -21,10 +23,15 @@ func downCmd(c *cli.Context) error {
 	}
 
 	v := c.Args().Get(0)
-	vi, err := strconv.ParseInt(v, 10, 64)
-	if err != nil {
-		fmt.Printf("Invalid version format. Error: " + err.Error())
-		os.Exit(1)
+
+	if v == "*" {
+		vi = -1
+	} else {
+		vi, err = strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			fmt.Printf("Invalid version format. Error: " + err.Error())
+			os.Exit(1)
+		}
 	}
 
 	cfg := loadConfigHelper()
@@ -36,7 +43,7 @@ func downCmd(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	if _, ok := md[vi]; !ok {
+	if _, ok := md[vi]; !ok && vi > 0 {
 		fmt.Println("Unable revert down to migration version `" + v + "`. No such applied version")
 		os.Exit(1)
 	}
