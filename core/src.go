@@ -14,9 +14,9 @@ const (
 	ERROR_INVALID_SRC_DIRECTORY = "invalid_sources_directory"
 )
 
-func LoadSrcMigrations(path string) (map[uint64]*Migration, error) {
+func LoadSrcMigrations(path string) (map[int64]*Migration, error) {
 	var err error
-	var ml = make(map[uint64]*Migration)
+	var ml = make(map[int64]*Migration)
 	var p string
 
 	p, err = filepath.Abs(path)
@@ -47,7 +47,7 @@ func LoadSrcMigration(path string, version string) (*Migration, error) {
 		return m, NewSrcFileError(ERROR_INVALID_VERSION_FORMAT, version, "", err)
 	}
 
-	m.Version = uint64(vInt)
+	m.Version = vInt
 	buf, err := ioutil.ReadFile(path + string(os.PathSeparator) + version + ".up.sql")
 	if err != nil {
 		return m, NewSrcFileError(ERROR_UNABLE_TO_OPEN_SRC_FILE, version, "up", err)

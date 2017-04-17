@@ -36,22 +36,22 @@ func downCmd(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	if _, ok := md[uint64(vi)]; !ok {
+	if _, ok := md[vi]; !ok {
 		fmt.Println("Unable revert down to migration version `" + v + "`. No such applied version")
 		os.Exit(1)
 	}
 
-	var vs = []uint64{}
+	var vs = []int64{}
 	for v, _ := range md {
 		vs = append(vs, v)
 	}
 	sort.Sort(sort.Reverse(version(vs)))
 
 	for _, v := range vs {
-		if v == uint64(vi) {
+		if v == vi {
 			break
 		}
-		fmt.Print("Reverting migration with version `" + strconv.FormatInt(int64(v), 10) + "`...")
+		fmt.Print("Reverting migration with version `" + strconv.FormatInt(v, 10) + "`...")
 		err = core.RevertMigration(db, md[v])
 		if err != nil {
 			fmt.Println("failed.")

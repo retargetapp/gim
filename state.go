@@ -11,7 +11,7 @@ import (
 	"github.com/vova-ukraine/gim/core"
 )
 
-type version []uint64
+type version []int64
 
 func (v version) Len() int           { return len(v) }
 func (v version) Swap(i, j int)      { v[i], v[j] = v[j], v[i] }
@@ -39,7 +39,7 @@ func stateCmd(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	var vm = make(map[uint64]struct{})
+	var vm = make(map[int64]struct{})
 	for v, _ := range md {
 		vm[v] = struct{}{}
 	}
@@ -47,7 +47,7 @@ func stateCmd(c *cli.Context) error {
 		vm[v] = struct{}{}
 	}
 
-	var vs = []uint64{}
+	var vs = []int64{}
 	for v, _ := range vm {
 		vs = append(vs, v)
 	}

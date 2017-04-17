@@ -51,8 +51,8 @@ func CreateMigrationTable(db *sql.DB) error {
 	return err
 }
 
-func LoadDBMigrations(db *sql.DB) (map[uint64]*Migration, error) {
-	var m = map[uint64]*Migration{}
+func LoadDBMigrations(db *sql.DB) (map[int64]*Migration, error) {
+	var m = map[int64]*Migration{}
 	r, err := db.Query("SELECT * FROM " + MIGRATIONS_TABLE_NAME)
 	if err != nil {
 		return m, err
@@ -61,7 +61,7 @@ func LoadDBMigrations(db *sql.DB) (map[uint64]*Migration, error) {
 
 	for r.Next() {
 		var u, d string
-		var v uint64
+		var v int64
 		err := r.Scan(&v, &u, &d)
 		if err != nil {
 			return m, err

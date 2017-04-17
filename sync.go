@@ -36,7 +36,7 @@ func syncCmd(c *cli.Context) error {
 		os.Exit(1)
 	}
 
-	var vs = []uint64{}
+	var vs = []int64{}
 	for v, _ := range md {
 		vs = append(vs, v)
 	}
@@ -46,7 +46,7 @@ func syncCmd(c *cli.Context) error {
 		if _, ok := mr[v]; ok {
 			continue
 		}
-		fmt.Print("Reverting migration with version `" + strconv.FormatInt(int64(v), 10) + "`...")
+		fmt.Print("Reverting migration with version `" + strconv.FormatInt(v, 10) + "`...")
 		err = core.RevertMigration(db, md[v])
 		if err != nil {
 			fmt.Println("failed.")
@@ -56,7 +56,7 @@ func syncCmd(c *cli.Context) error {
 		fmt.Println("ok.")
 	}
 
-	vs = []uint64{}
+	vs = []int64{}
 	for v, _ := range mr {
 		vs = append(vs, v)
 	}
@@ -66,7 +66,7 @@ func syncCmd(c *cli.Context) error {
 		if _, ok := md[v]; ok {
 			continue
 		}
-		fmt.Print("Applying migration with version `" + strconv.FormatInt(int64(v), 10) + "`...")
+		fmt.Print("Applying migration with version `" + strconv.FormatInt(v, 10) + "`...")
 		err = core.ApplyMigration(db, mr[v])
 		if err != nil {
 			fmt.Println("failed.")
