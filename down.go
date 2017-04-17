@@ -56,6 +56,7 @@ func downCmd(c *cli.Context) error {
 		if err != nil {
 			fmt.Println("failed.")
 			fmt.Println("Unable to revert migration. Error:" + err.Error())
+			os.Exit(1)
 		}
 		fmt.Println("ok.")
 	}
