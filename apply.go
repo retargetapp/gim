@@ -12,7 +12,7 @@ import (
 )
 
 func applyCmd(c *cli.Context) error {
-	fmt.Println("Apply custm migration version")
+	fmt.Println("Apply custom migration version")
 	if !c.Args().Present() {
 		fmt.Println("Migration version undefined. Use `gim apply <version>`")
 		os.Exit(1)
@@ -41,7 +41,6 @@ func applyCmd(c *cli.Context) error {
 
 	db := initDBHelper(cfg)
 	_, err = core.LoadDBMigration(db, v)
-
 	if err == nil {
 		fmt.Println("Migration version `" + v + "` alread applied")
 		os.Exit(0)
@@ -54,11 +53,11 @@ func applyCmd(c *cli.Context) error {
 		}
 	}
 
-	fmt.Print("Appling migration version `" + v + "`...")
+	fmt.Print("Appling migration with version `" + v + "`...")
 	err = core.ApplyMigration(db, mr)
 	if err != nil {
 		fmt.Println("failed.")
-		fmt.Println("Unable to apply migration script. Error:" + err.Error())
+		fmt.Println("Unable to apply migration. Error:" + err.Error())
 	}
 
 	fmt.Println("ok.")

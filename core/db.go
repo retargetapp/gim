@@ -104,3 +104,13 @@ func ApplyMigration(db *sql.DB, m *Migration) error {
 	}
 	return nil
 }
+
+func RevertMigration(db *sql.DB, m *Migration) error {
+	_, err := db.Exec(m.Down)
+	if err != nil {
+		return err
+	}
+
+	db.Exec("DELETE FROM `"+MIGRATIONS_TABLE_NAME+"` WHERE `version` = ?", m.Version)
+	return nil
+}
