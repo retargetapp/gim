@@ -16,6 +16,7 @@ import (
 func downCmd(c *cli.Context) error {
 	var vi int64
 	var err error
+
 	fmt.Println("Down to custom migration version")
 	if !c.Args().Present() {
 		fmt.Println("Migration version undefined. Use `gim down <version>`")
@@ -24,7 +25,7 @@ func downCmd(c *cli.Context) error {
 
 	v := c.Args().Get(0)
 
-	if v == "*" {
+	if v == "." {
 		vi = -1
 	} else {
 		vi, err = strconv.ParseInt(v, 10, 64)

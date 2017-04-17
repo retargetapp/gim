@@ -66,7 +66,7 @@ func syncCmd(c *cli.Context) error {
 		if _, ok := md[v]; ok {
 			continue
 		}
-		fmt.Print("Applying migration with version `" + strconv.FormatInt(v, 10) + "`...")
+		fmt.Print("Applying migration with version `" + strconv.FormatInt(int64(v), 10) + "`...")
 		err = core.ApplyMigration(db, mr[v])
 		if err != nil {
 			fmt.Println("failed.")
