@@ -3,6 +3,8 @@ package core
 import (
 	"database/sql"
 
+	"reflect"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/pkg/errors"
 )
@@ -34,12 +36,57 @@ func InitDB(driver, dsn string) (*sql.DB, error) {
 }
 
 func CheckMigrationsTable(db *sql.DB) error {
-	var t, d string
-	err := db.QueryRow("SHOW CREATE TABLE `"+MIGRATIONS_TABLE_NAME+"`").Scan(&t, &d)
+	rs, err := db.Query("DESC " + MIGRATIONS_TABLE_NAME)
 	if err != nil {
 		return errors.New(ERROR_MIGRATION_TABLE_NOT_EXISTS)
 	}
-	if d != MIGRATION_TABLE_SCRIPT {
+	defer rs.Close()
+
+	type rt struct {
+		Field, Type, Null, Key, Extra string
+		Default                       sql.NullString
+	}
+
+	var s = make(map[uint]rt)
+	var i = uint(0)
+	for rs.Next() {
+		r := rt{}
+		err = rs.Scan(&r.Field, &r.Type, &r.Null, &r.Key, &r.Default, &r.Extra)
+		if err != nil {
+			return err
+		}
+		s[i] = r
+		i++
+	}
+
+	tpl := map[uint]rt{
+		0: {
+			Field:   "version",
+			Type:    "int(8) unsigned",
+			Null:    "NO",
+			Key:     "PRI",
+			Default: sql.NullString{},
+			Extra:   "auto_increment",
+		},
+		1: {
+			Field:   "up",
+			Type:    "text",
+			Null:    "NO",
+			Key:     "",
+			Default: sql.NullString{},
+			Extra:   "",
+		},
+		2: {
+			Field:   "down",
+			Type:    "text",
+			Null:    "NO",
+			Key:     "",
+			Default: sql.NullString{},
+			Extra:   "",
+		},
+	}
+
+	if !reflect.DeepEqual(s, tpl) {
 		return errors.New(ERROR_MIGRATION_TABLE_INVALID_SCHEMA)
 	}
 
