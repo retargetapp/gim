@@ -16,7 +16,10 @@ func applyCmd(c *cli.Context) error {
 	}
 
 	v := c.Args().Get(0)
-	cfg := loadConfigHelper()
+	cfg, cerr := loadConfigHelper()
+	if cerr != nil {
+		return cerr
+	}
 
 	p, err := filepath.Abs(cfg.Src)
 	if err != nil {
@@ -34,7 +37,11 @@ func applyCmd(c *cli.Context) error {
 		}
 	}
 
-	db := initDBHelper(cfg)
+	db, cerr := initDBHelper(cfg)
+	if cerr != nil {
+		return cerr
+	}
+
 	_, err = core.LoadDBMigration(db, v)
 	if err == nil {
 		return cli.NewExitError("Migration version `"+v+"` alread applied", 1)

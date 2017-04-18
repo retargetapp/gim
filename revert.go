@@ -12,11 +12,18 @@ func revertCmd(c *cli.Context) error {
 	if !c.Args().Present() {
 		return cli.NewExitError("Migration version undefined. Use `gim revert <version>`", 1)
 	}
-
 	v := c.Args().Get(0)
-	cfg := loadConfigHelper()
 
-	db := initDBHelper(cfg)
+	cfg, cerr := loadConfigHelper()
+	if cerr != nil {
+		return cerr
+	}
+
+	db, cerr := initDBHelper(cfg)
+	if cerr != nil {
+		return cerr
+	}
+
 	m, err := core.LoadDBMigration(db, v)
 	if err != nil {
 		if err.Error() == core.ERROR_MIGRATION_RECORD_NOT_EXISTS {

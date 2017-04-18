@@ -17,8 +17,16 @@ func (v version) Less(i, j int) bool { return v[i] < v[j] }
 
 func stateCmd(c *cli.Context) error {
 	fmt.Println("Gim migration version state:")
-	cfg := loadConfigHelper()
-	db := initDBHelper(cfg)
+
+	cfg, cerr := loadConfigHelper()
+	if cerr != nil {
+		return cerr
+	}
+
+	db, cerr := initDBHelper(cfg)
+	if cerr != nil {
+		return cerr
+	}
 
 	md, err := core.LoadDBMigrations(db)
 	if err != nil {

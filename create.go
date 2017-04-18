@@ -10,7 +10,11 @@ import (
 )
 
 func createCmd(c *cli.Context) error {
-	cfg := loadConfigHelper()
+	cfg, cerr := loadConfigHelper()
+	if cerr != nil {
+		return cerr
+	}
+
 	v := strconv.FormatInt(time.Now().Unix(), 10)
 	fmt.Print("Create migration source templates...")
 	err := core.CreateSrcVersionTpl(cfg.Src, v)

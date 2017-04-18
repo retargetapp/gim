@@ -14,8 +14,15 @@ import (
 func syncCmd(c *cli.Context) error {
 	fmt.Println("Sync Gim state")
 
-	cfg := loadConfigHelper()
-	db := initDBHelper(cfg)
+	cfg, cerr := loadConfigHelper()
+	if cerr != nil {
+		return cerr
+	}
+
+	db, cerr := initDBHelper(cfg)
+	if cerr != nil {
+		return cerr
+	}
 
 	md, err := core.LoadDBMigrations(db)
 	if err != nil {

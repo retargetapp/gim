@@ -31,8 +31,15 @@ func downCmd(c *cli.Context) error {
 		}
 	}
 
-	cfg := loadConfigHelper()
-	db := initDBHelper(cfg)
+	cfg, cerr := loadConfigHelper()
+	if cerr != nil {
+		return cerr
+	}
+
+	db, cerr := initDBHelper(cfg)
+	if cerr != nil {
+		return cerr
+	}
 
 	md, err := core.LoadDBMigrations(db)
 	if err != nil {
