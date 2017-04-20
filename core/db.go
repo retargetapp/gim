@@ -5,6 +5,8 @@ import (
 
 	"reflect"
 
+	"strings"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/pkg/errors"
 )
@@ -144,7 +146,14 @@ func ApplyMigration(db *sql.DB, m *Migration) error {
 		return err
 	}
 
-	_, err = db.Exec(m.Up)
+	qs := strings.Split(m.Up, ";")
+	for _, q := range qs {
+		_, err = db.Exec(q)
+		if err != nil {
+			break
+		}
+	}
+
 	if err != nil {
 		db.Exec("DELETE FROM `"+MIGRATIONS_TABLE_NAME+"` WHERE `version` = ?", m.Version)
 		return err
@@ -153,9 +162,12 @@ func ApplyMigration(db *sql.DB, m *Migration) error {
 }
 
 func RevertMigration(db *sql.DB, m *Migration) error {
-	_, err := db.Exec(m.Down)
-	if err != nil {
-		return err
+	qs := strings.Split(m.Up, ";")
+	for _, q := range qs {
+		_, err := db.Exec(q)
+		if err != nil {
+			return err
+		}
 	}
 
 	db.Exec("DELETE FROM `"+MIGRATIONS_TABLE_NAME+"` WHERE `version` = ?", m.Version)
