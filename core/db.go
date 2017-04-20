@@ -23,6 +23,7 @@ const (
 	ERROR_MIGRATION_TABLE_NOT_EXISTS     = "migration_table_not_exists"
 	ERROR_MIGRATION_TABLE_INVALID_SCHEMA = "migration_table_invalid_schema"
 	ERROR_MIGRATION_RECORD_NOT_EXISTS    = "migration_record_not_exists"
+	ERROR_EMPTY_QUERY                    = "empty_query"
 )
 
 type MigrationsTableNotExistsError error
@@ -146,7 +147,10 @@ func ApplyMigration(db *sql.DB, m *Migration) error {
 		return err
 	}
 
-	qs := strings.Split(m.Up, ";")
+	qs := splitQueries(m.Up)
+	if len(qs) <= 0 {
+		return errors.New(ERROR_EMPTY_QUERY)
+	}
 	for _, q := range qs {
 		_, err = db.Exec(q)
 		if err != nil {
@@ -162,7 +166,10 @@ func ApplyMigration(db *sql.DB, m *Migration) error {
 }
 
 func RevertMigration(db *sql.DB, m *Migration) error {
-	qs := strings.Split(m.Up, ";")
+	qs := splitQueries(m.Down)
+	if len(qs) <= 0 {
+		return errors.New(ERROR_EMPTY_QUERY)
+	}
 	for _, q := range qs {
 		_, err := db.Exec(q)
 		if err != nil {
@@ -172,4 +179,16 @@ func RevertMigration(db *sql.DB, m *Migration) error {
 
 	db.Exec("DELETE FROM `"+MIGRATIONS_TABLE_NAME+"` WHERE `version` = ?", m.Version)
 	return nil
+}
+
+func splitQueries(queries string) []string {
+	var qr []string
+	qs := strings.Split(queries, ";")
+	for _, q := range qs {
+		q := strings.Trim(q, " ")
+		if len(q) > 0 {
+			qr = append(qr, q)
+		}
+	}
+	return qr
 }
