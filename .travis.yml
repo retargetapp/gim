@@ -1,0 +1,24 @@
+language: go
+
+sudo: false
+
+go:
+- 1.5.x
+- 1.6.x
+- 1.7.x
+- 1.8.x
+- master
+
+matrix:
+  allow_failures:
+  - go: master
+  include:
+  - go: 1.6.x
+    os: osx
+  - go: 1.7.x
+    os: osx
+  - go: 1.8.x
+    os: osx
+
+insatll:
+- go get github.com/urfave/cli || true

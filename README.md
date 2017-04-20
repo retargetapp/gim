@@ -1,5 +1,7 @@
 # Gim
 
+[![Build Status](https://travis-ci.org/retargetapp/gim.svg?branch=master)](https://travis-ci.org/retargetapp/gim)
+
 Gim is tool for Gopher teams 
 
 ## Installation
