@@ -8,7 +8,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
-	"github.com/vova-ukraine/gim/core"
+	"github.com/retargetapp/gim/core"
 )
 
 func configCmd(c *cli.Context) error {

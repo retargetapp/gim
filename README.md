@@ -6,7 +6,7 @@ Gim is tool for Gopher teams
 
 Download and install Gim: 
 ```
-go get github.com/vova-ukraine/gim
+go get github.com/retargetapp/gim
 ```
 Gim will be installed to `$GOPATH/bin` directory.
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/urfave/cli"
-	"github.com/vova-ukraine/gim/core"
+	"github.com/retargetapp/gim/core"
 )
 
 func revertCmd(c *cli.Context) error {

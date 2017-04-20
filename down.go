@@ -8,7 +8,7 @@ import (
 	"sort"
 
 	"github.com/urfave/cli"
-	"github.com/vova-ukraine/gim/core"
+	"github.com/retargetapp/gim/core"
 )
 
 func downCmd(c *cli.Context) error {

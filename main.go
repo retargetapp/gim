@@ -6,7 +6,7 @@ import (
 	"database/sql"
 
 	"github.com/urfave/cli"
-	"github.com/vova-ukraine/gim/core"
+	"github.com/retargetapp/gim/core"
 )
 
 func main() {

@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/urfave/cli"
-	"github.com/vova-ukraine/gim/core"
+	"github.com/retargetapp/gim/core"
 )
 
 func applyCmd(c *cli.Context) error {
