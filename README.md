@@ -1,6 +1,7 @@
 # Gim
 
 [![Build Status](https://travis-ci.org/retargetapp/gim.svg?branch=master)](https://travis-ci.org/retargetapp/gim)
+[![Go Report Card](https://goreportcard.com/badge/github.com/retargetapp/gim)](https://goreportcard.com/report/github.com/retargetapp/gim)
 
 Gim is tool for Gopher teams 
 
