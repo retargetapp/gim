@@ -5,8 +5,8 @@ import (
 
 	"sort"
 
-	"github.com/urfave/cli"
 	"github.com/retargetapp/gim/core"
+	"github.com/urfave/cli"
 )
 
 type version []int64

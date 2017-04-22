@@ -7,8 +7,8 @@ import (
 
 	"strconv"
 
-	"github.com/urfave/cli"
 	"github.com/retargetapp/gim/core"
+	"github.com/urfave/cli"
 )
 
 func syncCmd(c *cli.Context) error {

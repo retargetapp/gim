@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/urfave/cli"
 	"github.com/retargetapp/gim/core"
+	"github.com/urfave/cli"
 )
 
 func revertCmd(c *cli.Context) error {

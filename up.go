@@ -7,8 +7,8 @@ import (
 
 	"sort"
 
-	"github.com/urfave/cli"
 	"github.com/retargetapp/gim/core"
+	"github.com/urfave/cli"
 )
 
 func upCmd(c *cli.Context) error {

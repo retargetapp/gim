@@ -5,8 +5,8 @@ import (
 
 	"database/sql"
 
-	"github.com/urfave/cli"
 	"github.com/retargetapp/gim/core"
+	"github.com/urfave/cli"
 )
 
 func main() {

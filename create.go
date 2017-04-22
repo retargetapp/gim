@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/urfave/cli"
 	"github.com/retargetapp/gim/core"
+	"github.com/urfave/cli"
 )
 
 func createCmd(c *cli.Context) error {
